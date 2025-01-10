@@ -1,0 +1,88 @@
+
+library(readr)
+df1 <- readr::read_csv("./categorical-target.csv", col_names = TRUE)
+
+
+
+    # Calculate confusion matrix components
+    TP <- sum(df1$Target == "TRUE" & df1$Prediction == "TRUE")
+    TN <- sum(df1$Target == "FALSE" & df1$Prediction == "FALSE")
+    FP <- sum(df1$Target == "FALSE" & df1$Prediction == "TRUE")
+    FN <- sum(df1$Target == "TRUE" & df1$Prediction == "FALSE")
+    
+    # Create the confusion matrix
+    confusion_matrix <- matrix(c(TN, FP, FN, TP), 
+                               nrow = 2, 
+                               dimnames = list("Actual" = c("FALSE", "TRUE"),
+                                               "Predicted" = c("FALSE", "TRUE")))
+    
+    # Calculate misclassification rate
+    misclassification_rate <- (FP + FN) / nrow(df1)
+    
+    # Display results
+    knitr::kable(confusion_matrix, caption = 'Confusion Matrix for Predictions', align = "l")
+    cat(paste("Misclassification Rate:", round(misclassification_rate, 3)))
+
+    # Calculate Precision and Recall
+    precision <- TP / (TP + FP)
+    recall <- TP / (TP + FN)
+    
+    # Calculate Harmonic Mean (F1-score)
+    f1_score <- 2 * (precision * recall) / (precision + recall)
+    
+    # Display the results
+    cat(paste("Precision:", round(precision, 3)))
+    cat(paste("\nRecall:", round(recall, 3)))
+    cat(paste("\nHarmonic Mean (F1-score):", round(f1_score, 3)))
+
+    # Calculate Precision
+    precision <- TP / (TP + FP)
+    
+    # Calculate Recall
+    recall <- TP / (TP + FN)
+    
+    # Calculate F1 Measure
+    f1_measure <- 2 * (precision * recall) / (precision + recall)
+    
+    # Display results
+    cat(paste("Precision:", round(precision, 3)))
+    cat(paste("\nRecall:", round(recall, 3)))
+    cat(paste("\nF1 Measure:", round(f1_measure, 3)))
+
+library(readr)
+df2 <- readr::read_csv("./continuous-target.csv", col_names = TRUE)
+
+
+    # Calculate Sum of Squared Errors (SSE) for Model 1
+    df2$SSE_Model1 <- (df2$Target - df2$`Model 1 Prediction`)^2
+    SSE_Model1 <- sum(df2$SSE_Model1)
+    
+    # Calculate Sum of Squared Errors (SSE) for Model 2
+    df2$SSE_Model2 <- (df2$Target - df2$`Model 2 Prediction`)^2
+    SSE_Model2 <- sum(df2$SSE_Model2)
+    
+    # Display results
+    cat(paste("Sum of Squared Errors for Model 1:", SSE_Model1))
+    cat(paste("\nSum of Squared Errors for Model 2:", SSE_Model2))
+
+    # Calculate the mean of the Target
+    target_mean <- mean(df2$Target)
+    
+    # Calculate Total Sum of Squares (SST)
+    df2$SST <- (df2$Target - target_mean)^2
+    SST <- sum(df2$SST)
+    
+    # Calculate SSE for each model (if not already computed)
+    df2$SSE_Model1 <- (df2$Target - df2$`Model 1 Prediction`)^2
+    df2$SSE_Model2 <- (df2$Target - df2$`Model 2 Prediction`)^2
+    SSE_Model1 <- sum(df2$SSE_Model1)
+    SSE_Model2 <- sum(df2$SSE_Model2)
+    
+    # Calculate R^2 for each model
+    R2_Model1 <- 1 - (SSE_Model1 / SST)
+    R2_Model2 <- 1 - (SSE_Model2 / SST)
+    
+    # Display results
+    cat(paste("R^2 for Model 1:", round(R2_Model1, 3)))
+    cat(paste("\nR^2 for Model 2:", round(R2_Model2, 3)))
+

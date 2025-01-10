@@ -20,7 +20,6 @@ df1 <- readr::read_csv("./categorical-target.csv", col_names = TRUE)
     misclassification_rate <- (FP + FN) / nrow(df1)
     
     # Display results
-    knitr::kable(confusion_matrix, caption = 'Confusion Matrix for Predictions', align = "l")
     cat(paste("Misclassification Rate:", round(misclassification_rate, 3)))
 
     # Calculate Precision and Recall
